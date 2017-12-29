@@ -35,9 +35,9 @@ main = do
   print (asClient options)
 
 readClientMessages :: Socket -> Chan ByteString -> IO ()
-readClientMessages sock chan =
-  forever $ do
+readClientMessages sock chan = do
     message <- B.concat <$> recvUntilEnd sock 1024
+    when (message /= "") $ putStrLn message
     when (message /= "quit\r\n\r\n") $ do
       writeChan chan message
       readClientMessages sock chan
